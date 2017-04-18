@@ -45,9 +45,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser()==null){
-                    Intent loginIntent = new Intent(MainActivity.this,RegisterActivity.class);
-                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(loginIntent);
+                    goToRegister();
                 }
             }
         };
@@ -130,5 +128,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void logout() {
         mAuth.signOut();
+        goToRegister();
+
+    }
+
+    private void goToRegister(){
+        Intent loginIntent = new Intent(MainActivity.this,RegisterActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(loginIntent);
     }
 }
