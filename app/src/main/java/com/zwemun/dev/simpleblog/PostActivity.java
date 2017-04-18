@@ -74,7 +74,7 @@ public class PostActivity extends AppCompatActivity {
 
     private void startPosting() {
         mProgressDialog.setMessage("Uploading to blog..");
-
+        
         final String title = mPostTitle.getText().toString().trim();
         final String desc = mPostDesc.getText().toString().trim();
 

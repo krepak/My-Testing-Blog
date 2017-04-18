@@ -16,19 +16,23 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mBlogList;
+
     private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
-
+        mDatabase.keepSynced(true);
         mBlogList = (RecyclerView) findViewById(R.id.blog_list);
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
@@ -68,9 +72,21 @@ public class MainActivity extends AppCompatActivity {
             TextView post_desc = (TextView) mView.findViewById(R.id.post_desc);
             post_desc.setText(desc);
         }
-        public void setImage(Context context,String image){
-            ImageView post_image = (ImageView) mView.findViewById(R.id.post_Image);
-            Picasso.with(context).load(image).into(post_image);
+        public void setImage(final Context context, final String image){
+            final ImageView post_image = (ImageView) mView.findViewById(R.id.post_Image);
+            //Picasso.with(context).load(image).into(post_image);
+
+            Picasso.with(context).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(post_image, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+                    Picasso.with(context).load(image).into(post_image);
+                }
+            });
         }
     }
 
